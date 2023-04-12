@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Veille informationnelle</title>
+	<style>
+		#results {
+			margin: 10px;
+			padding: 10px;
+			border: 1px solid black;
+			max-height: 200px;
+			overflow-y: scroll;
+		}
+	</style>
+	<script>
+		// Fonction pour récupérer les informations et les afficher sur la page HTML
+		function veilleInformationnelle() {
+			// Définir l'URL de la page à scraper
+			const url = 'https://7evident.fr/';
+
+			// Récupérer le contenu HTML de la page à l'aide de l'API Fetch
+			fetch(url)
+				.then(response => response.text())
+				.then(html => {
+					// Extraire les informations pertinentes de la page à l'aide de JavaScript
+					const matches = html.match(/<h2>(.*?)<\/h2>/gs);
+
+					// Créer un élément <ul> pour stocker les informations collectées
+					const ul = document.createElement('ul');
+
+					// Parcourir les informations collectées et les ajouter à la liste
+					matches.forEach(match => {
+						const li = document.createElement('li');
+						li.textContent = match.replace(/<.*?>/g, '');
+						ul.appendChild(li);
+					});
+
+					// Ajouter la liste des informations à la page HTML
+					const results = document.getElementById('results');
+					results.innerHTML = '';
+					results.appendChild(ul);
+				})
+				.catch(error => console.error(error));
+		}
+	</script>
+</head>
+<body>
+	<button onclick="veilleInformationnelle()">Collecter les informations</button>
+	<div id="results"></div>
+</body>
+</html>
